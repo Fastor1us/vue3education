@@ -1,7 +1,9 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <MyInput v-model="searchQuery" placeholder="Поиск..." />
+    <MyInput v-model="searchQuery" placeholder="Поиск..." :style="{
+      width: '100%'
+    }" />
     <div class="app__btns">
       <MyButton v-on:click="showDialog">
         Создать пост
@@ -13,6 +15,7 @@
     </MyDialog>
     <PostList :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>Идёт загрузка...</div>
+    <PageSelector :totalPages="totalPages" :page="page" @changePage="changePage" />
   </div>
 </template>
 
@@ -32,11 +35,14 @@ export default {
       dialogVisible: false,
       isPostsLoading: false,
       selectedSort: '',
+      searchQuery: '',
+      page: 1,
+      limit: 10,
+      totalPages: 0,
       sortOption: [
         { value: 'title', name: 'По названию' },
         { value: 'body', name: 'По содержимому' }
       ],
-      searchQuery: ''
     }
   },
   methods: {
@@ -50,10 +56,19 @@ export default {
     showDialog() {
       this.dialogVisible = true
     },
+    changePage(pageNumber) {
+      this.page = pageNumber
+    },
     async fetchPosts() {
       try {
         this.isPostsLoading = true
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        })
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
         this.posts = response.data
       } catch (e) {
         console.log('Ошибка получения данных от сервера');
@@ -78,7 +93,9 @@ export default {
     }
   },
   watch: {
-
+    page() {
+      this.fetchPosts()
+    }
   }
 }
 </script>
