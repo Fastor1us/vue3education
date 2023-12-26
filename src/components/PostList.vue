@@ -1,7 +1,9 @@
 <template>
   <div v-if="posts.length > 0">
     <h3>Список постов</h3>
-    <PostItem v-for="post in posts" v-bind:post="post" v-bind:key="post.id" v-on:remove="$emit('remove', post)" />
+    <TransitionGroup name="post-list">
+      <PostItem v-for="post in posts" :post="post" :key="post.id" @remove="$emit('remove', post)" />
+    </TransitionGroup>
   </div>
   <h3 v-else style="color:red">
     Список постов пуст
@@ -22,4 +24,22 @@ export default {
 </script>
 
 <style scoped>
+.post-list-enter-active,
+.post-list-leave-active {
+  transition: all 0.4s ease;
+}
+
+.post-list-enter-from {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.post-list-leave-to {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+.post-list-move {
+  transition: transform 0.4s;
+}
 </style>
