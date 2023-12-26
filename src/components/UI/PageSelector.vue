@@ -2,7 +2,7 @@
   <div class="page__wrapper">
     <div v-for="pageNumber in totalPages" :key="pageNumber" class="page" :class="{
       'current-page': page === pageNumber
-    }" v-on:click="$emit('changePage', pageNumber)">
+    }" v-on:click="$emit('update:page', pageNumber)">
       {{ pageNumber }}
     </div>
   </div>

@@ -15,7 +15,7 @@
     </MyDialog>
     <PostList :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>Идёт загрузка...</div>
-    <PageSelector :totalPages="totalPages" :page="page" @changePage="changePage" />
+    <PageSelector :totalPages="totalPages" v-model:page="page" />
   </div>
 </template>
 
@@ -55,9 +55,6 @@ export default {
     },
     showDialog() {
       this.dialogVisible = true
-    },
-    changePage(pageNumber) {
-      this.page = pageNumber
     },
     async fetchPosts() {
       try {
