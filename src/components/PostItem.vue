@@ -5,9 +5,14 @@
       <div> <strong>Название:</strong> {{ post.title }} </div>
       <div> <strong>Описание:</strong> {{ post.body }} </div>
     </div>
-    <MyButton v-on:click="$emit('remove', post)">
-      Удалить
-    </MyButton>
+    <div class="post__btns">
+      <MyButton @click="$router.push(`/posts/${post.id}`)" style="margin-bottom: 10px;">
+        Открыть
+      </MyButton>
+      <MyButton v-on:click="$emit('remove', post)">
+        Удалить
+      </MyButton>
+    </div>
   </div>
 </template>
 
@@ -30,5 +35,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.post__btns {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
 }
 </style>
