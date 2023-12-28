@@ -3,7 +3,7 @@ import Main from '@/pages/Main'
 import Posts from '@/pages/Posts'
 import PostId from '@/pages/PostId'
 import About from '@/pages/About'
-import PostsTest from '@/pages/PostsTest'
+import PostsWithStore from '@/pages/PostsWithStore'
 
 
 const routes = [
@@ -24,8 +24,8 @@ const routes = [
     component: PostId
   },
   {
-    path: '/test',
-    component: PostsTest
+    path: '/store',
+    component: PostsWithStore
   }
 ]
 

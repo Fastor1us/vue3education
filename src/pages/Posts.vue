@@ -6,15 +6,14 @@
       <MyButton v-on:click="showDialog">
         Создать пост
       </MyButton>
-      <MySelect v-model="selectedSort" v-bind:options="sortOption" />
+      <MySelect v-model="selectedSort" v-bind:options="sortOptions" />
     </div>
     <MyDialog v-model:show="dialogVisible">
       <PostForm v-on:create="createPost" />
     </MyDialog>
     <PostList :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>Идёт загрузка...</div>
-    {{ isIntersectCondition }}
-    <div v-intersection="loadMorePosts" class="observer"></div>
+    <div v-if="isFirstFetchDone && page < totalPages" v-intersection="loadMorePosts" class="observer"></div>
     <!-- <PageSelector :totalPages="totalPages" v-model:page="page" /> -->
   </div>
 </template>
@@ -39,10 +38,11 @@ export default {
       page: 1,
       limit: 10,
       totalPages: 0,
-      sortOption: [
+      sortOptions: [
         { value: 'title', name: 'По названию' },
         { value: 'body', name: 'По содержимому' }
       ],
+      isFirstFetchDone: false
     }
   },
   methods: {
@@ -91,6 +91,9 @@ export default {
   },
   mounted() {
     this.fetchPosts()
+      .then(() => {
+        this.isFirstFetchDone = true
+      })
   },
   computed: {
     sortedPosts() {
@@ -102,9 +105,6 @@ export default {
       return this.sortedPosts.filter(post =>
         post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       )
-    },
-    isIntersectCondition() {
-      return (this.page < this.totalPages);
     },
   },
   watch: {
