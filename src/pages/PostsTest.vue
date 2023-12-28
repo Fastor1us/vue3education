@@ -1,34 +1,19 @@
 <template>
   <div>
     <h1>Страница с постами</h1>
-    <MyInput v-model="searchQuery" placeholder="Поиск..." style="width: 100%" />
-    <div class="app__btns">
-      <MyButton v-on:click="showDialog">
-        Создать пост
-      </MyButton>
-      <MySelect v-model="selectedSort" v-bind:options="sortOption" />
-    </div>
-    <MyDialog v-model:show="dialogVisible">
-      <PostForm v-on:create="createPost" />
-    </MyDialog>
-    <PostList :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
+    <PostList :posts="posts" v-if="!isPostsLoading" />
     <div v-else>Идёт загрузка...</div>
     {{ isIntersectCondition }}
-    <div v-intersection="loadMorePosts" class="observer"></div>
-    <!-- <PageSelector :totalPages="totalPages" v-model:page="page" /> -->
+    <div v-intersection="isIntersectCondition" class="observer"></div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import PostForm from '@/components/PostForm.vue';
 import PostList from '@/components/PostList.vue';
 export default {
   name: 'Posts',
-  components: {
-    PostList,
-    PostForm,
-  },
+  components: { PostList },
   data() {
     return {
       posts: [],
@@ -46,16 +31,6 @@ export default {
     }
   },
   methods: {
-    createPost(post) {
-      this.posts.push(post)
-      this.dialogVisible = false
-    },
-    removePost(post) {
-      this.posts = this.posts.filter(item => item.id !== post.id)
-    },
-    showDialog() {
-      this.dialogVisible = true
-    },
     async fetchPosts() {
       try {
         this.isPostsLoading = true
@@ -93,37 +68,12 @@ export default {
     this.fetchPosts()
   },
   computed: {
-    sortedPosts() {
-      return [...this.posts].sort((post1, post2) => {
-        return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
-      })
-    },
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter(post =>
-        post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-      )
-    },
     isIntersectCondition() {
-      return (this.page < this.totalPages);
+      return this.page < this.totalPages;
     },
   },
-  watch: {
-    // page() {
-    //   this.fetchPosts()
-    // }
-  }
 }
 </script>
 
 <style>
-.app__btns {
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0;
-}
-
-.observer {
-  height: 30px;
-  background: green;
-}
 </style>
