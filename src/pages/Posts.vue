@@ -13,8 +13,8 @@
     </MyDialog>
     <PostList :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>Идёт загрузка...</div>
-    <div v-if="isFirstFetchDone && page < totalPages" v-intersection="loadMorePosts" class="observer"></div>
-    <!-- <PageSelector :totalPages="totalPages" v-model:page="page" /> -->
+    <!-- <div v-if="isFirstFetchDone && page < totalPages" v-intersection="loadMorePosts" class="observer"></div> -->
+    <PageSelector :totalPages="totalPages" v-model:page="page" />
   </div>
 </template>
 
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     createPost(post) {
-      this.posts.push(post)
+      this.posts.unshift(post)
       this.dialogVisible = false
     },
     removePost(post) {
@@ -73,21 +73,21 @@ export default {
         this.isPostsLoading = false
       }
     },
-    async loadMorePosts() {
-      try {
-        this.page += 1;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-          params: {
-            _page: this.page,
-            _limit: this.limit
-          }
-        })
-        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-        this.posts = [...this.posts, ...response.data]
-      } catch (e) {
-        console.log('Ошибка получения данных от сервера');
-      }
-    }
+    // async loadMorePosts() {
+    //   try {
+    //     this.page += 1;
+    //     const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+    //       params: {
+    //         _page: this.page,
+    //         _limit: this.limit
+    //       }
+    //     })
+    //     this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
+    //     this.posts = [...this.posts, ...response.data]
+    //   } catch (e) {
+    //     console.log('Ошибка получения данных от сервера');
+    //   }
+    // }
   },
   mounted() {
     this.fetchPosts()
@@ -108,9 +108,9 @@ export default {
     },
   },
   watch: {
-    // page() {
-    //   this.fetchPosts()
-    // }
+    page() {
+      this.fetchPosts()
+    }
   }
 }
 </script>

@@ -46,7 +46,7 @@ export default {
       loadMorePosts: 'post/loadMorePosts'
     }),
     createPost(post) {
-      this.posts.push(post)
+      this.posts.unshift(post)
       this.dialogVisible = false
     },
     removePost(post) {
