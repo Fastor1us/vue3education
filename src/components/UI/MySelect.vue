@@ -7,6 +7,7 @@
   </select>
 </template>
 
+
 <script>
 export default {
   name: 'MySelect',
@@ -26,6 +27,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 </style>

@@ -3,17 +3,24 @@
 </template>
 
 
+<script setup>
+defineProps({
+  modelValue: {
+    type: [String, Number]
+  },
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const updateInput = (event) => {
+  emit('update:modelValue', event.target.value);
+};
+</script>
+
+
 <script>
 export default {
-  name: "MyInput",
-  props: {
-    modelValue: [String, Number]
-  },
-  methods: {
-    updateInput(event) {
-      this.$emit('update:modelValue', event.target.value)
-    }
-  }
+  name: "MyInputSetup"
 }
 </script>
 

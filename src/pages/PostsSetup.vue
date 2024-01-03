@@ -1,19 +1,18 @@
 <template>
   <div>
     <h1>Страница с постами</h1>
-    <MyInput v-model="searchQuery" placeholder="Поиск..." style="width: 100%" />
+    <MyInputSetup v-model="searchQuery" placeholder="Поиск..." style="width: 100%" />
     <div class="app__btns">
       <MyButton v-on:click="showDialog">
         Создать пост
       </MyButton>
-      <MySelect v-model="selectedSort" v-bind:options="sortOptions" />
+      <MySelectSetup v-model="selectedSort" v-bind:options="sortOptions" />
     </div>
     <MyDialog v-model:show="dialogVisible">
-      <PostForm v-on:create="createPost" />
+      <PostFormSetup v-on:create="createPost" />
     </MyDialog>
     <PostList :posts="sortedAndSearchedPosts" @remove="removePost" v-if="!isPostsLoading" />
     <div v-else>Идёт загрузка...</div>
-    <!-- <div v-if="isFirstFetchDone && page < totalPages" v-intersection="loadMorePosts" class="observer"></div> -->
     <PageSelector :totalPages="totalPages" v-model:page="page" />
   </div>
 </template>
@@ -21,13 +20,13 @@
 
 <script>
 import axios from 'axios';
-import PostForm from '@/components/PostForm.vue';
+import PostFormSetup from '@/components/PostFormSetup.vue';
 import PostList from '@/components/PostList.vue';
 export default {
-  name: 'Posts',
+  name: 'PostsSetup',
   components: {
-    PostList,
-    PostForm,
+    PostFormSetup,
+    PostList
   },
   data() {
     return {
@@ -74,21 +73,6 @@ export default {
         this.isPostsLoading = false
       }
     },
-    // async loadMorePosts() {
-    //   try {
-    //     this.page += 1;
-    //     const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-    //       params: {
-    //         _page: this.page,
-    //         _limit: this.limit
-    //       }
-    //     })
-    //     this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-    //     this.posts = [...this.posts, ...response.data]
-    //   } catch (e) {
-    //     console.log('Ошибка получения данных от сервера');
-    //   }
-    // }
   },
   mounted() {
     this.fetchPosts()

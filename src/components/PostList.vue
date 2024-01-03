@@ -10,6 +10,7 @@
   </h3>
 </template>
 
+
 <script>
 import PostItem from './PostItem.vue';
 export default {
@@ -22,6 +23,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .post-list-enter-active,

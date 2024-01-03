@@ -8,6 +8,7 @@
   </div>
 </template>
 
+
 <script>
 export default {
   name: 'PageSelector',
@@ -23,6 +24,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .page__wrapper {

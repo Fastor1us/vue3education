@@ -16,6 +16,7 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 import PostForm from '@/components/PostForm.vue';
@@ -56,6 +57,7 @@ export default {
   }
 }
 </script>
+
 
 <style>
 .app__btns {
